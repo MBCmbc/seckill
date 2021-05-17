@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import java.util.Date;
 import java.util.List;
@@ -48,6 +50,15 @@ public class SeckillController {
 		model.addAttribute("seckill", seckill);
 
 		return "detail";
+	}
+
+	@RequestMapping(value = "/{seckillId}/detailJson", method = RequestMethod.GET)
+	public ModelAndView detailJson(@PathVariable("seckillId") Long seckillId) {
+		ModelAndView mv = new ModelAndView();
+		Seckill seckill = seckillService.getById(seckillId);
+		mv.setView(new MappingJackson2JsonView());
+		mv.addObject("seckill", seckill);
+		return mv;
 	}
 
 	//ajax ,json暴露秒杀接口的方法
